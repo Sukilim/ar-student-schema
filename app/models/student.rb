@@ -8,7 +8,8 @@ validation_phone : phone_number?
 
 def phone_number?
 	if self.phone.scan(/\d/).count <10
-	error.add(:phone, "Please insert phone number again")
+		error.add(:phone, "Please insert phone number again")
+	end
 end
 	def name
 	"#{first_name} #{last_name}"
