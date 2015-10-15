@@ -2,24 +2,32 @@ require_relative '../../db/config'
 
 class Student < ActiveRecord::Base
 # implement your Student model here
-validation_email :email, uniqueness: true { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/ }
-validation_age :age, numericality: {:greater_than_or_equal_to => 5 }
-validation_phone : phone_number?
+	validates :email, uniqueness: true, format: {with: /.+@.+[.][^.]{2,}\z/}
+	validates :age, numericality: {greater_than_or_equal_to: 5}
+	validates :phone, format: {with: /.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d/}
 
-def phone_number?
-	if self.phone.scan(/\d/).count <10
-		error.add(:phone, "Please insert phone number again")
-	end
-end
 	def name
-	"#{first_name} #{last_name}"
+		"#{self.first_name} #{self.last_name}"
 	end
 
 	def age
 		now = Date.today
-		age = now.year - @student.birthday.year - ((now.month > @student.birthday.month || (now.month == @student.birthday.month && now.day >= @student.birthday.day)) ? 0 : 1)
+		age = now.year - birthday.year
 	end
 end
 
-# john = Student.new
-# john.age
+# a = Student.where(first_name: 'Kyle').first <==cant test this way
+# p a.name
+# a = Student.find_by(first_name: "Kyle")
+# a.name
+# a = Student.find(1)
+# a.age
+
+# b = Student.create(first_name: 'Amy', last_name: 'Loo', email: 'amy.loo@gmail.com', birthday: '1992-06-18', phone: '2123456786')
+# b.save
+# p b
+# p Student.all
+
+# c = Student.create(first_name: 'Food', last_name: 'Lala', email: 'aaa@gmail.com', birthday: '1991-06-18', phone: '5674')
+# c.save
+# p c
